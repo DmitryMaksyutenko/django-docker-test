@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+
+  application:
+    container_name: django-application
+    image: django-test:test
+    env_file:
+      - "../app_settings/local/.env"
+    ports:
+      - "8000:8000"
+    build:
+      context: ../../
+      dockerfile: local.Dockerfile
+    command: pdm run python ../manage.py runserver 0.0.0.0:8000
+
+
+  postgres:
+    image: postgres:14
+    env_file:
+        - "../app_settings/local/.env.db"
+    ports:
+        - "5432:5432"
+    volumes:
+        - "db_data:/var/lib/postgresql/data/"
+
+
+volumes:
+    db_data:
